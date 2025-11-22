@@ -144,10 +144,15 @@ void deleteOrder()
             {
                 if (i != id)
                 {
-                    orders[newOrderNumber++] = orders[i];
+                    newOrders[newOrderNumber].product = orders[i].product;
+                    newOrders[newOrderNumber].customer = orders[i].customer;
+                    newOrders[newOrderNumber].quantity = orders[i].quantity;
+
+                    newOrderNumber++;
                 }
             }
 
+            delete[] orders;
             orders = newOrders;
             orderNumber--;
 

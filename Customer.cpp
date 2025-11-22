@@ -137,10 +137,14 @@ void deleteCustomer()
             {
                 if (i != id)
                 {
-                    customers[newCustomerNumber++] = customers[i];
+                    strcpy(newCustomers[newCustomerNumber].name, customers[i].name);
+                    strcpy(newCustomers[newCustomerNumber].address, customers[i].address);
+
+                    newCustomerNumber++;
                 }
             }
 
+            delete[] customers;
             customers = newCustomers;
             customerNumber--;
 

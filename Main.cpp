@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 
@@ -9,9 +10,14 @@
 
 //------------------------------------------------------------------------------
 
-void loadData()
+static void loadData()
 {
     std::ifstream in("data\\products.bin", std::ios::binary);
+
+    if (in.is_open() == false)
+    {
+        return;
+    }
 
     in.seekg(0, std::ios::end);
     unsigned int size = (unsigned int)in.tellg();
@@ -57,8 +63,9 @@ void loadData()
     in.close();
 }
 
-void saveData()
+static void saveData()
 {
+    std::filesystem::create_directory("data");
     std::ofstream out("data\\products.bin", std::ios::binary);
 
     for (unsigned int i = 0; i < productNumber; i++)
@@ -91,13 +98,13 @@ void saveData()
 
 int main()
 {
-    char c;
-
     loadData();
+
+    char c;
 
     do
     {
-        system("cls");
+        std::system("cls");
 
         std::cout
             << "Simple Oil Order System\n\n"
@@ -118,7 +125,7 @@ int main()
 
         c = std::cin.get();
 
-        system("cls");
+        std::system("cls");
 
         switch (c)
         {

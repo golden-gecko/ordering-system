@@ -144,10 +144,15 @@ void deleteProduct()
             {
                 if (i != id)
                 {
-                    products[newProductNumber++] = products[i];
+                    strcpy(newProducts[newProductNumber].name, products[i].name);
+                    newProducts[newProductNumber].price = products[i].price;
+                    newProducts[newProductNumber].discount = products[i].discount;
+
+                    newProductNumber++;
                 }
             }
 
+            delete[] products;
             products = newProducts;
             productNumber--;
 
