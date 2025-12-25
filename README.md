@@ -1,5 +1,4 @@
-Ordering System
-==============
+# Ordering System
 
 It is a very old, probably one of my early high school projects.
 
