@@ -1,18 +1,18 @@
-cmake_minimum_required(VERSION 4.1.2)
+cmake_minimum_required(VERSION 4.3.1)
 
 project(ordering-system)
 
-add_executable(
-    ordering-system
-    Customer.cpp Customer.hpp
-    Main.cpp
-    Order.cpp Order.hpp
-    Product.cpp Product.hpp
-)
+# Sources
+file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp)
+file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
-set_target_properties(ordering-system PROPERTIES
+# Target
+add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
+
+# Properties
+set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS NO
     CXX_STANDARD 23
     CXX_STANDARD_REQUIRED YES
-    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
