@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 4.3.1)
 
+# Project
 project(ordering-system)
 
 # Sources
