@@ -12,86 +12,103 @@
 
 static void loadData()
 {
-    std::ifstream in("data\\products.bin", std::ios::binary);
+    std::ifstream in;
+    
+    in.open("data\\products.bin", std::ios::binary);
 
-    if (in.is_open() == false)
+    if (in.is_open())
     {
-        return;
+        in.seekg(0, std::ios::end);
+        std::streampos size = in.tellg();
+        in.seekg(0, std::ios::beg);
+
+        products = new Product[productNumber = size / sizeof(Product)];
+
+        for (unsigned int i = 0; i < size / sizeof(Product); i++)
+        {
+            in.read((char*)&products[i], sizeof(Product));
+        }
+
+        in.close();
     }
-
-    in.seekg(0, std::ios::end);
-    unsigned int size = (unsigned int)in.tellg();
-    in.seekg(0, std::ios::beg);
-
-    products = new Product[productNumber = size / sizeof(Product)];
-
-    for (unsigned int i = 0; i < size / sizeof(Product); i++)
-    {
-        in.read((char*)&products[i], sizeof(Product));
-    }
-
-    in.close();
 
     in.open("data\\customers.bin", std::ios::binary);
 
-    in.seekg(0, std::ios::end);
-    size = (unsigned int)in.tellg();
-    in.seekg(0, std::ios::beg);
-
-    customers = new Customer[customerNumber = size / sizeof(Customer)];
-
-    for (unsigned int i = 0; i < size / sizeof(Customer); i++)
+    if (in.is_open())
     {
-        in.read((char*)&customers[i], sizeof(Customer));
-    }
+        in.seekg(0, std::ios::end);
+        std::streampos size = in.tellg();
+        in.seekg(0, std::ios::beg);
 
-    in.close();
+        customers = new Customer[customerNumber = size / sizeof(Customer)];
+
+        for (unsigned int i = 0; i < size / sizeof(Customer); i++)
+        {
+            in.read((char*)&customers[i], sizeof(Customer));
+        }
+
+        in.close();
+    }
 
     in.open("data\\orders.bin", std::ios::binary);
 
-    in.seekg(0, std::ios::end);
-    size = (unsigned int)in.tellg();
-    in.seekg(0, std::ios::beg);
-
-    orders = new Order[orderNumber = size / sizeof(Order)];
-
-    for (unsigned int i = 0; i < size / sizeof(Order); i++)
+    if (in.is_open())
     {
-        in.read((char*)&orders[i], sizeof(Order));
-    }
+        in.seekg(0, std::ios::end);
+        std::streampos size = in.tellg();
+        in.seekg(0, std::ios::beg);
 
-    in.close();
+        orders = new Order[orderNumber = size / sizeof(Order)];
+
+        for (unsigned int i = 0; i < size / sizeof(Order); i++)
+        {
+            in.read((char*)&orders[i], sizeof(Order));
+        }
+
+        in.close();
+    }
 }
 
 static void saveData()
 {
     std::filesystem::create_directory("data");
-    std::ofstream out("data\\products.bin", std::ios::binary);
+    std::ofstream out;
+    
+    out.open("data\\products.bin", std::ios::binary);
 
-    for (unsigned int i = 0; i < productNumber; i++)
+    if (out.is_open())
     {
-        out.write((char*)&products[i], sizeof(Product));
-    }
+        for (unsigned int i = 0; i < productNumber; i++)
+        {
+            out.write((char*)&products[i], sizeof(Product));
+        }
 
-    out.close();
+        out.close();
+    }
 
     out.open("data\\customers.bin", std::ios::binary);
 
-    for (unsigned int i = 0; i < customerNumber; i++)
+    if (out.is_open())
     {
-        out.write((char*)&customers[i], sizeof(Customer));
-    }
+        for (unsigned int i = 0; i < customerNumber; i++)
+        {
+            out.write((char*)&customers[i], sizeof(Customer));
+        }
 
-    out.close();
+        out.close();
+    }
 
     out.open("data\\orders.bin", std::ios::binary);
 
-    for (unsigned int i = 0; i < orderNumber; i++)
+    if (out.is_open())
     {
-        out.write((char*)&orders[i], sizeof(Order));
-    }
+        for (unsigned int i = 0; i < orderNumber; i++)
+        {
+            out.write((char*)&orders[i], sizeof(Order));
+        }
 
-    out.close();
+        out.close();
+    }
 }
 
 //------------------------------------------------------------------------------
