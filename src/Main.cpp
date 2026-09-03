@@ -2,116 +2,113 @@
 #include <fstream>
 #include <iostream>
 
-//------------------------------------------------------------------------------
-
 #include "Customer.hpp"
 #include "Order.hpp"
 #include "Product.hpp"
 
-//------------------------------------------------------------------------------
-
-static void loadData()
+namespace
 {
-    std::ifstream in;
-    
-    in.open("data\\products.bin", std::ios::binary);
-
-    if (in.is_open())
+    void loadData()
     {
-        in.seekg(0, std::ios::end);
-        std::streampos size = in.tellg();
-        in.seekg(0, std::ios::beg);
+        std::ifstream in;
 
-        products = new Product[productNumber = size / sizeof(Product)];
+        in.open("data\\products.bin", std::ios::binary);
 
-        for (unsigned int i = 0; i < size / sizeof(Product); i++)
+        if (in.is_open())
         {
-            in.read((char*)&products[i], sizeof(Product));
+            in.seekg(0, std::ios::end);
+            std::streampos size = in.tellg();
+            in.seekg(0, std::ios::beg);
+
+            products = new Product[productNumber = size / sizeof(Product)];
+
+            for (unsigned int i = 0; i < size / sizeof(Product); i++)
+            {
+                in.read((char*)&products[i], sizeof(Product));
+            }
+
+            in.close();
         }
 
-        in.close();
+        in.open("data\\customers.bin", std::ios::binary);
+
+        if (in.is_open())
+        {
+            in.seekg(0, std::ios::end);
+            std::streampos size = in.tellg();
+            in.seekg(0, std::ios::beg);
+
+            customers = new Customer[customerNumber = size / sizeof(Customer)];
+
+            for (unsigned int i = 0; i < size / sizeof(Customer); i++)
+            {
+                in.read((char*)&customers[i], sizeof(Customer));
+            }
+
+            in.close();
+        }
+
+        in.open("data\\orders.bin", std::ios::binary);
+
+        if (in.is_open())
+        {
+            in.seekg(0, std::ios::end);
+            std::streampos size = in.tellg();
+            in.seekg(0, std::ios::beg);
+
+            orders = new Order[orderNumber = size / sizeof(Order)];
+
+            for (unsigned int i = 0; i < size / sizeof(Order); i++)
+            {
+                in.read((char*)&orders[i], sizeof(Order));
+            }
+
+            in.close();
+        }
     }
 
-    in.open("data\\customers.bin", std::ios::binary);
-
-    if (in.is_open())
+    void saveData()
     {
-        in.seekg(0, std::ios::end);
-        std::streampos size = in.tellg();
-        in.seekg(0, std::ios::beg);
+        std::filesystem::create_directory("data");
+        std::ofstream out;
 
-        customers = new Customer[customerNumber = size / sizeof(Customer)];
+        out.open("data\\products.bin", std::ios::binary);
 
-        for (unsigned int i = 0; i < size / sizeof(Customer); i++)
+        if (out.is_open())
         {
-            in.read((char*)&customers[i], sizeof(Customer));
+            for (unsigned int i = 0; i < productNumber; i++)
+            {
+                out.write((char*)&products[i], sizeof(Product));
+            }
+
+            out.close();
         }
 
-        in.close();
-    }
+        out.open("data\\customers.bin", std::ios::binary);
 
-    in.open("data\\orders.bin", std::ios::binary);
-
-    if (in.is_open())
-    {
-        in.seekg(0, std::ios::end);
-        std::streampos size = in.tellg();
-        in.seekg(0, std::ios::beg);
-
-        orders = new Order[orderNumber = size / sizeof(Order)];
-
-        for (unsigned int i = 0; i < size / sizeof(Order); i++)
+        if (out.is_open())
         {
-            in.read((char*)&orders[i], sizeof(Order));
+            for (unsigned int i = 0; i < customerNumber; i++)
+            {
+                out.write((char*)&customers[i], sizeof(Customer));
+            }
+
+            out.close();
         }
 
-        in.close();
+        out.open("data\\orders.bin", std::ios::binary);
+
+        if (out.is_open())
+        {
+            for (unsigned int i = 0; i < orderNumber; i++)
+            {
+                out.write((char*)&orders[i], sizeof(Order));
+            }
+
+            out.close();
+        }
     }
 }
-
-static void saveData()
-{
-    std::filesystem::create_directory("data");
-    std::ofstream out;
-    
-    out.open("data\\products.bin", std::ios::binary);
-
-    if (out.is_open())
-    {
-        for (unsigned int i = 0; i < productNumber; i++)
-        {
-            out.write((char*)&products[i], sizeof(Product));
-        }
-
-        out.close();
-    }
-
-    out.open("data\\customers.bin", std::ios::binary);
-
-    if (out.is_open())
-    {
-        for (unsigned int i = 0; i < customerNumber; i++)
-        {
-            out.write((char*)&customers[i], sizeof(Customer));
-        }
-
-        out.close();
-    }
-
-    out.open("data\\orders.bin", std::ios::binary);
-
-    if (out.is_open())
-    {
-        for (unsigned int i = 0; i < orderNumber; i++)
-        {
-            out.write((char*)&orders[i], sizeof(Order));
-        }
-
-        out.close();
-    }
-}
-
-//------------------------------------------------------------------------------
 
 int main()
 {
